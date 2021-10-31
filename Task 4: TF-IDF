@@ -1,0 +1,143 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+get_ipython().system('pip install sasl')
+
+
+# In[2]:
+
+
+get_ipython().system('pip install thrift')
+
+
+# In[3]:
+
+
+get_ipython().system('pip install thrift-sasl')
+
+
+# In[4]:
+
+
+get_ipython().system('pip install Pyhive')
+
+
+# In[5]:
+
+
+get_ipython().system('pip install tabulate')
+
+
+# In[7]:
+
+
+from pyhive import hive
+
+
+# In[8]:
+
+
+from tabulate import tabulate
+
+
+# In[9]:
+
+
+import pandas as pd
+
+
+# In[10]:
+
+
+connnect_string = hive.Connection(host='localhost',port=10000,username='gunjan-m',password='8807528637844981985',database='default',auth='CUSTOM')
+
+
+# In[15]:
+
+
+cursor_hive = connnect_string.cursor() 
+cursor_hive.execute('SELECT PrimaryId,OwnerName,sum(Score_value) as Score_value from gunjanposts_views GROUP BY PrimaryId, OwnerName ORDER BY Score_value DESC LIMIT 10')
+
+
+# In[18]:
+
+
+result = cursor_hive.fetchall()
+
+
+# In[20]:
+
+
+result
+
+
+# In[23]:
+
+
+df5 = pd.read_sql("SELECT DISTINCT(PrimaryId), OwnerName, TitleMain, Body_main FROM gunjanposts_views WHERE PrimaryId IN ('11227809','927358','2003505','292357','231767','477816','348170','5767325','6591213','1642028') ORDER BY PrimaryId",connnect_string)
+
+
+# In[24]:
+
+
+df5.head()
+
+
+# In[27]:
+
+
+df5["primaryId"] = df5["titlemain"] + df5["body_main"]
+
+
+# In[29]:
+
+
+username_top10 = list(df5["ownername"].unique())
+
+
+# In[30]:
+
+
+username_top10
+
+
+# In[35]:
+
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+
+# In[44]:
+
+
+# Calculate sum() of TF-IDF and get top 10 words with highest TF-IDF and select only those columns
+def calculate_tf_idf(df):
+   vectorizeG = TfidfVectorizer(stop_words='english', lowercase=True) # Remove Stop Words
+   responseG = vectorizeG.fit_transform(df5["primaryId"]) # Use title field for TF/IDF
+   df_tfidf_sklrn = pd.DataFrame(responseG.toarray(),columns=vectorizeG.get_feature_names())
+   tf_idf_total = df_tfidf_sklrn.sum(axis = 0) # Remove sum of TF/IDF for getting top 10 most used words
+   list_top10 = tf_idf_total.nlargest(10) # Get top 10 words per user
+   words_top_10 = list(list_top10.index) # Get list of top 10 words
+   df_tfidf_sklrn[words_top_10] # Select only top 10 words as column
+   return df_tfidf_sklrn[words_top_10]
+
+
+# In[45]:
+
+
+for each_user in username_top10: ## Iterate over all top 10 users
+   data_filtered = df5[(df5['ownername']==each_user)] # Filter data only for selected user
+   tf_idf_df5 = calculate_tf_idf(data_filtered) # pass on to above function
+   print("For Username ID TF/IDF table : "+each_user)
+   tf_idf_df5.insert(0, 'usernameid', each_user)# attach username ID field to dataframe
+   display(tf_idf_df5)
+
+
+# In[ ]:
+
+
+
+
