@@ -1,0 +1,16 @@
+CREATE TABLE IF NOT EXISTS gunjanstackpostss (PrimaryId int, PostTypeId tinyint, AcceptedId int, MainParentId int, CreateDate timestamp, DeleteDate timestamp, Score_value int, ViewCounts int, Body_main string, OwnerUId int, OwnerName varchar(40), PreviousEditorUId int, LastEditorDisplayName varchar(40), PreviousEditDate timestamp, RecentActiveDate timestamp, TitleMain varchar (250), Tags varchar (250), AnsCount int, CmntsCount int, FavCount int, EndDate timestamp, CommunityPurchaseDate timestamp, ContentLicenseValue varchar (12)) ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde';
+ 
+LOAD DATA INPATH 'gs://dataproc-staging-us-central1-1072064021969-6feslfcz/Gunjan Data/cleaned200k.csv' INTO TABLE gunjanstackpostss;
+
+CREATE VIEW IF NOT EXISTS gunjanposts_views as select cast(PrimaryId as int) as PrimaryId, cast(PostTypeId as tinyint) as PostTypeId, AcceptedId , MainParentId ,CreateDate , DeleteDate , cast(Score_value as int) as Score_value, cast(ViewCounts as int) as ViewCounts, Body_main, cast(OwnerUId as int) as OwnerUId, OwnerName as OwnerName, PreviousEditorUId, LastEditorDisplayName , PreviousEditDate , RecentActiveDate , TitleMain , Tags , AnsCount , CmntsCount , FavCount , EndDate , CommunityPurchaseDate , ContentLicenseValue from gunjanstackpostss;
+
+
+2.2.1. The top 10 posts by score:-
+SELECT PrimaryId, TitleMain, Score_value from gunjanposts_views ORDER BY Score_value DESC LIMIT 10;
+
+2.2.2. The top 10 users by post score:-
+SELECT OwnerUId,OwnerName,sum(Score_value) as Score_value from gunjanposts_views GROUP BY OwnerUId, OwnerName ORDER BY Score_value DESC LIMIT 10;
+
+2.2.3. The number of distinct users, who used the word “cloud” in one of their posts:-
+SELECT COUNT(DISTINCT OwnerUId) as UniqueUsers FROM gunjanposts_views WHERE TitleMain LIKE '% cloud %' OR Body_main LIKE '% cloud %';
+
