@@ -1,0 +1,627 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Data_Cleaning.ipynb",
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "je-BxxRk4OyG"
+      },
+      "source": [
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "import os"
+      ],
+      "execution_count": 1,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "aKu8vPOh6Nl-",
+        "outputId": "dac37bba-1b7f-49e6-fd4f-83ccce0eb560"
+      },
+      "source": [
+        "from google.colab import drive\n",
+        "\n",
+        "drive.mount('/content/drive', force_remount=True)"
+      ],
+      "execution_count": 2,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Mounted at /content/drive\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 35
+        },
+        "id": "5oy7_J4V6Ngw",
+        "outputId": "10dc6110-295a-40d5-d157-64676fa030fc"
+      },
+      "source": [
+        "os.getcwd()"
+      ],
+      "execution_count": 3,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            },
+            "text/plain": [
+              "'/content'"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 3
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 35
+        },
+        "id": "QVApMpl47ms9",
+        "outputId": "c7adfba7-98f8-4a0a-9f8e-1948f2a0a008"
+      },
+      "source": [
+        "filepath = '/content/drive/MyDrive'\n",
+        "os.chdir(filepath)\n",
+        "os.getcwd()"
+      ],
+      "execution_count": 11,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            },
+            "text/plain": [
+              "'/content/drive/MyDrive'"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 11
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "LJr8w7mk8Go3",
+        "outputId": "59171247-be90-4b7e-eff8-e89335568f98"
+      },
+      "source": [
+        "!ls"
+      ],
+      "execution_count": 12,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            " 70066.jpeg\t\t\t\t    'MERIT Scholarship 21264302.pdf'\n",
+            "'Colab Notebooks'\t\t\t     Resume.docx\n",
+            "'DCU Firm Offer - International (PGT).pdf'   StackExchange200kPosts.csv\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 677
+        },
+        "id": "McZi88OV8I9a",
+        "outputId": "77fb7817-76f2-495f-c613-72f51a1c9fc4"
+      },
+      "source": [
+        "stackdf = pd.read_csv('cleaned200k', low_memory=False)\n",
+        "stackdf.head(5)"
+      ],
+      "execution_count": 13,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Id</th>\n",
+              "      <th>PostTypeId</th>\n",
+              "      <th>AcceptedAnswerId</th>\n",
+              "      <th>ParentId</th>\n",
+              "      <th>CreationDate</th>\n",
+              "      <th>DeletionDate</th>\n",
+              "      <th>Score</th>\n",
+              "      <th>ViewCount</th>\n",
+              "      <th>Body</th>\n",
+              "      <th>OwnerUserId</th>\n",
+              "      <th>OwnerDisplayName</th>\n",
+              "      <th>LastEditorUserId</th>\n",
+              "      <th>LastEditorDisplayName</th>\n",
+              "      <th>LastEditDate</th>\n",
+              "      <th>LastActivityDate</th>\n",
+              "      <th>Title</th>\n",
+              "      <th>Tags</th>\n",
+              "      <th>AnswerCount</th>\n",
+              "      <th>CommentCount</th>\n",
+              "      <th>FavoriteCount</th>\n",
+              "      <th>ClosedDate</th>\n",
+              "      <th>CommunityOwnedDate</th>\n",
+              "      <th>ContentLicense</th>\n",
+              "      <th>Unnamed: 23</th>\n",
+              "      <th>Unnamed: 24</th>\n",
+              "      <th>Unnamed: 25</th>\n",
+              "      <th>Unnamed: 26</th>\n",
+              "      <th>Unnamed: 27</th>\n",
+              "      <th>Unnamed: 28</th>\n",
+              "      <th>Unnamed: 29</th>\n",
+              "      <th>Unnamed: 30</th>\n",
+              "      <th>Unnamed: 31</th>\n",
+              "      <th>Unnamed: 32</th>\n",
+              "      <th>Unnamed: 33</th>\n",
+              "      <th>Unnamed: 34</th>\n",
+              "      <th>Unnamed: 35</th>\n",
+              "      <th>Unnamed: 36</th>\n",
+              "      <th>Unnamed: 37</th>\n",
+              "      <th>Unnamed: 38</th>\n",
+              "      <th>Unnamed: 39</th>\n",
+              "      <th>Unnamed: 40</th>\n",
+              "      <th>Unnamed: 41</th>\n",
+              "      <th>Unnamed: 42</th>\n",
+              "      <th>Unnamed: 43</th>\n",
+              "      <th>Unnamed: 44</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>927358</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>927386.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>5/29/2009 18:09</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>23303</td>\n",
+              "      <td>10030841</td>\n",
+              "      <td>&lt;p&gt;I accidentally &lt;strong&gt;committed the wrong ...</td>\n",
+              "      <td>89904.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>15578194.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>6/30/2021 5:07</td>\n",
+              "      <td>10/5/2021 13:26</td>\n",
+              "      <td>How do I undo the most recent local commits in...</td>\n",
+              "      <td>&lt;git&gt;&lt;version-control&gt;&lt;git-commit&gt;&lt;undo&gt;</td>\n",
+              "      <td>98.0</td>\n",
+              "      <td>9.0</td>\n",
+              "      <td>7309.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>3/16/2013 10:08</td>\n",
+              "      <td>CC BY-SA 4.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>2003505</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>2003515.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>1/5/2010 1:12</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>18475</td>\n",
+              "      <td>9258686</td>\n",
+              "      <td>&lt;p&gt;I want to delete a branch both locally and ...</td>\n",
+              "      <td>95592.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>6862601.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>10/6/2021 22:38</td>\n",
+              "      <td>10/6/2021 22:38</td>\n",
+              "      <td>How do I delete a Git branch locally and remot...</td>\n",
+              "      <td>&lt;git&gt;&lt;version-control&gt;&lt;git-branch&gt;&lt;git-push&gt;&lt;g...</td>\n",
+              "      <td>41.0</td>\n",
+              "      <td>10.0</td>\n",
+              "      <td>5718.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>CC BY-SA 4.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>5767325</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>5767357.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>4/23/2011 22:17</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>9899</td>\n",
+              "      <td>8897394</td>\n",
+              "      <td>&lt;p&gt;I have an array of numbers and I'm using th...</td>\n",
+              "      <td>364969.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>594916.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>5/21/2020 4:20</td>\n",
+              "      <td>9/24/2021 8:51</td>\n",
+              "      <td>How can I remove a specific item from an array?</td>\n",
+              "      <td>&lt;javascript&gt;&lt;arrays&gt;</td>\n",
+              "      <td>112.0</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>1501.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>CC BY-SA 4.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>16956810</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>16957078.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>6/6/2013 8:06</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>6286</td>\n",
+              "      <td>8203000</td>\n",
+              "      <td>&lt;p&gt;I'm trying to find a way to scan my entire ...</td>\n",
+              "      <td>954986.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>63550.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>5/21/2017 11:40</td>\n",
+              "      <td>8/30/2021 13:56</td>\n",
+              "      <td>How do I find all files containing specific te...</td>\n",
+              "      <td>&lt;linux&gt;&lt;text&gt;&lt;grep&gt;&lt;directory&gt;&lt;find&gt;</td>\n",
+              "      <td>53.0</td>\n",
+              "      <td>10.0</td>\n",
+              "      <td>3029.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>CC BY-SA 3.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>2906582</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>2906586.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>5/25/2010 16:39</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>2298</td>\n",
+              "      <td>7782563</td>\n",
+              "      <td>&lt;p&gt;I would like to create an HTML button that ...</td>\n",
+              "      <td>48523.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>63550.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>4/21/2021 16:46</td>\n",
+              "      <td>9/22/2021 19:42</td>\n",
+              "      <td>How to create an HTML button that acts like a ...</td>\n",
+              "      <td>&lt;html&gt;&lt;button&gt;&lt;hyperlink&gt;&lt;anchor&gt;</td>\n",
+              "      <td>37.0</td>\n",
+              "      <td>9.0</td>\n",
+              "      <td>503.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>CC BY-SA 4.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "         Id  PostTypeId  AcceptedAnswerId  ...  Unnamed: 42 Unnamed: 43 Unnamed: 44\n",
+              "0    927358         1.0          927386.0  ...          NaN         NaN         NaN\n",
+              "1   2003505         1.0         2003515.0  ...          NaN         NaN         NaN\n",
+              "2   5767325         1.0         5767357.0  ...          NaN         NaN         NaN\n",
+              "3  16956810         1.0        16957078.0  ...          NaN         NaN         NaN\n",
+              "4   2906582         1.0         2906586.0  ...          NaN         NaN         NaN\n",
+              "\n",
+              "[5 rows x 45 columns]"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 13
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "nOT3rqyw9sYN",
+        "outputId": "28a1d45b-8e44-4ffc-f763-147efdeb415e"
+      },
+      "source": [
+        "print(stackdf['Body_main'][:5])"
+      ],
+      "execution_count": 15,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0    <p>I accidentally <strong>committed the wrong ...\n",
+            "1    <p>I want to delete a branch both locally and ...\n",
+            "2    <p>I have an array of numbers and I'm using th...\n",
+            "3    <p>I'm trying to find a way to scan my entire ...\n",
+            "4    <p>I would like to create an HTML button that ...\n",
+            "Name: Body, dtype: object\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "9pvVSw249-Wh",
+        "outputId": "612b27d7-22a1-4fae-b26f-5058ce9ab83a"
+      },
+      "source": [
+        "stackdf['Body_main'] = stackdf['Body_main'].str.replace(r'<[^<>]*>', '', regex=True)\n",
+        "stackdf[\"Body_main\"] = stackdf['Body_main'].str.replace('[^a-zA-Z]', ' ', regex=True)\n",
+        "stackdf[\"Body_main\"] = stackdf['Body_main'].replace(r'\\n',' ', regex=True)\n",
+        "stackdf['Body_main'].head()"
+      ],
+      "execution_count": 17,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0    I accidentally committed the wrong files to Gi...\n",
+              "1    I want to delete a branch both locally and rem...\n",
+              "2    I have an array of numbers and I m using the  ...\n",
+              "3    I m trying to find a way to scan my entire Lin...\n",
+              "4    I would like to create an HTML button that act...\n",
+              "Name: Body, dtype: object"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 17
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "0qeZvzxc-3wY",
+        "outputId": "7a2d2fa8-e317-4f53-dea8-1de9554b3dd9"
+      },
+      "source": [
+        "stackdf['TitleMain'] = stackdf['TitleMain].str.replace(r'<[^<>]*>', '', regex=True)\n",
+        "stackdf[\"TitleMain\"] = stackdf['TitleMain'].str.replace('[^a-zA-Z]', ' ', regex=True)\n",
+        "stackdf[\"TitleMain\"] = stackdf['TitleMain'].replace(r'\\n',' ', regex=True)\n",
+        "stackdf['TitleMain'].head()"
+      ],
+      "execution_count": 18,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0    How do I undo the most recent local commits in...\n",
+              "1    How do I delete a Git branch locally and remot...\n",
+              "2      How can I remove a specific item from an array \n",
+              "3    How do I find all files containing specific te...\n",
+              "4    How to create an HTML button that acts like a ...\n",
+              "Name: Title, dtype: object"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 18
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 35
+        },
+        "id": "fWhXhw_d_zMk",
+        "outputId": "bac388a1-eff4-450e-beaa-ac403c84c490"
+      },
+      "source": [
+        "os.getcwd()"
+      ],
+      "execution_count": 19,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            },
+            "text/plain": [
+              "'/content/drive/My Drive'"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 19
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "1igsGyBX_TbG"
+      },
+      "source": [
+        "stackdf.to_csv('cleaned200k.csv')"
+      ],
+      "execution_count": 20,
+      "outputs": []
+    }
+  ]
+}
