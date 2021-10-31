@@ -6,3 +6,4 @@
   NOW to merge the files: 
   	Step 1: collect all the csv files into one separate folder and use change directory command (cd) to go into that folder .
   	Step 2: Type copy *.csv combined-csv-files.csv and Press Enter.
+  // using these commands all the data is collected and stored in a single .CSV file
