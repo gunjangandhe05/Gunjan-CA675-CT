@@ -1,0 +1,8 @@
+		Query 1: select top 50000* from posts where posts ViewCount < 99999999 ORDER BY posts ViewCount DESC
+  	Query 2: select top 50000* from posts where posts ViewCount<127402 ORDER BY posts ViewCount DESC
+  	Query 3: select top 50000* from posts where posts ViewCount<74597 ORDER BY posts ViewCount DESC   
+  	Query 4: select top 50000* from posts where posts ViewCount<53211 ORDER BY posts ViewCount DESC   
+  	Query 5: select top 4229* from posts where posts ViewCount< 42116 ORDER BY posts ViewCount DESC   
+  NOW to merge the files: 
+  	Step 1: collect all the csv files into one separate folder and use change directory command (cd) to go into that folder .
+  	Step 2: Type copy *.csv combined-csv-files.csv and Press Enter.
